@@ -1,7 +1,12 @@
-<VirtualHost *:80>
+<VirtualHost *:443>
     ServerName idp.example.com
     DocumentRoot /var/www/simplesamlphp
     Alias /simplesaml /var/www/simplesamlphp/www
+
+    SSLEngine on
+    SSLProxyEngine On
+    SSLCertificateFile /etc/apache2/apache-selfsigned.crt
+    SSLCertificateKeyFile /etc/apache2/apache-selfsigned.key
 
    <Directory /var/www/simplesamlphp>
         RewriteEngine On

@@ -107,6 +107,16 @@ $metadata['entity-id-2'] = array(
 );
 ```
 
+## Development
+
+* Update docker image 
+
+```
+sudo docker-compose pull
+sudo docker-compose up --force-recreate --build -d
+sudo docker image prune -f
+```
+
 ## Inspired By
 
 - https://github.com/kenchan0130/docker-simplesamlphp

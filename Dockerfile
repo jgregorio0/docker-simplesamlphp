@@ -31,12 +31,15 @@ COPY config/simplesamlphp/server.pem /var/www/simplesamlphp/cert/
 RUN echo "<?php" > /var/www/simplesamlphp/metadata/shib13-sp-remote.php
 
 # Apache
-ENV HTTP_PORT 80
+ENV HTTP_PORT 443
 
-COPY config/apache/ports.conf.mo /tmp
-COPY config/apache/simplesamlphp.conf.mo /tmp
+COPY config/apache/*.* /tmp/
 RUN /tmp/mo /tmp/ports.conf.mo > /etc/apache2/ports.conf && \
-    /tmp/mo /tmp/simplesamlphp.conf.mo > /etc/apache2/sites-available/simplesamlphp.conf
+    /tmp/mo /tmp/simplesamlphp.conf.mo > /etc/apache2/sites-available/simplesamlphp.conf && \
+    mv /tmp/apache-self*.* /etc/apache2/
+
+RUn a2enmod ssl && \
+    a2enmod socache_shmcb
 
 # hadolint ignore=DL3059
 RUN a2dissite 000-default.conf default-ssl.conf && \
@@ -51,4 +54,4 @@ RUN rm -rf /tmp/*
 WORKDIR /var/www/simplesamlphp
 
 # General setup
-EXPOSE 80
+EXPOSE 443
