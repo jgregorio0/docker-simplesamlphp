@@ -4,15 +4,17 @@
  *
  * See: https://simplesamlphp.org/docs/stable/simplesamlphp-reference-sp-remote
  */
+$metadata['workplace.example.com'] = array(
+    'AssertionConsumerService' => 'https://workplace.example.com/saml/callback/workplace.example.com',
+    'SingleLogoutService' => 'https://workplace.example.com/saml/callback/workplace.example.com?logoutendpoint=true',
+);
 
-if (!getenv('SIMPLESAMLPHP_SP_ENTITY_ID')) {
-    throw new UnexpectedValueException('SIMPLESAMLPHP_SP_ENTITY_ID is not defined as an environment variable.');
-}
-if (!getenv('SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE')) {
-    throw new UnexpectedValueException('SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE is not defined as an environment variable.');
-}
+$metadata['site1.example.com'] = array(
+    'AssertionConsumerService' => 'https://site1.example.com/saml/callback/site1.example.com',
+    'SingleLogoutService' => 'https://site1.example.com/saml/callback/site1.example.com?logoutendpoint=true',
+);
 
-$metadata[getenv('SIMPLESAMLPHP_SP_ENTITY_ID')] = array(
-    'AssertionConsumerService' => getenv('SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE'),
-    'SingleLogoutService' => getenv('SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE'),
+$metadata['site2.example.com'] = array(
+    'AssertionConsumerService' => 'https://site2.example.com/saml/callback/site2.example.com',
+    'SingleLogoutService' => 'https://site2.example.com/saml/callback/site2.example.com?logoutendpoint=true',
 );

@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM php:8.2-apache
+FROM php:8.2-apache
 
 RUN apt-get update && \
     apt-get -y install apt-transport-https git curl vim --no-install-recommends && \
@@ -31,7 +31,7 @@ COPY config/simplesamlphp/server.pem /var/www/simplesamlphp/cert/
 RUN echo "<?php" > /var/www/simplesamlphp/metadata/shib13-sp-remote.php
 
 # Apache
-ENV HTTP_PORT 8080
+ENV HTTP_PORT 80
 
 COPY config/apache/ports.conf.mo /tmp
 COPY config/apache/simplesamlphp.conf.mo /tmp
@@ -51,4 +51,4 @@ RUN rm -rf /tmp/*
 WORKDIR /var/www/simplesamlphp
 
 # General setup
-EXPOSE ${HTTP_PORT}
+EXPOSE 80

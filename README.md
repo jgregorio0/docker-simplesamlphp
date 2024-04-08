@@ -14,32 +14,11 @@ SimpleSAMLphp is logging to stdout on debug log level. Apache is logging error a
 
 ## Usage
 
-### Using docker run command
+* Modify [saml20-sp-remote.php](config%2Fsimplesamlphp%2Fsaml20-sp-remote.php) adding SP Entity ID, ACS and SLO. Get this information from SP metadata file.
+* Deploy `sudo docker-compose up` and access [simplesaml](https://idp.example.com/simplesaml/module.php/core/frontpage_federation.php)
+* Download SAML [metadata](http://idp.example.com/simplesaml/saml2/idp/metadata.php)
 
-```sh
-docker run --name=idp \
-  -p 8080:8080 \
-  -e SIMPLESAMLPHP_SP_ENTITY_ID=http://app.example.com \
-  -e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp \
-  -e SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp \
-  -d kenchan0130/simplesamlphp
-```
-
-### Using docker-compose
-
-```yml
-version: "3"
-services:
-  idp:
-    image: kenchan0130/simplesamlphp
-    container_name: idp
-    ports:
-      - "8080:8080"
-    environment:
-      SIMPLESAMLPHP_SP_ENTITY_ID: http://app.example.com
-      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp
-      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp
-```
+TODO JG puerto 443 HTTPS
 
 There are two static users configured in the IdP with the following data:
 
@@ -58,9 +37,6 @@ admin|secret
 
 Name|Required/Optional|Description
 ---|---|---
-`SIMPLESAMLPHP_SP_ENTITY_ID`|Required|The entity ID of your SP.
-`SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE`|Requried|The assertion consumer service of your SP.
-`SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE`|Optional|The single logout url of your SP.
 `SIMPLESAMLPHP_IDP_ADMIN_PASSWORD`|Optional|The password of admin of this IdP. Default is `secret`.
 `SIMPLESAMLPHP_IDP_SECRET_SALT`|Optional|This is a secret salt used by this IdP when it needs to generate a secure hash of a value. Default is `defaultsecretsalt`.
 `SIMPLESAMLPHP_IDP_SESSION_DURATION_SECONDS`|Optional|This value is the duration of the session of this IdP in seconds.
@@ -114,40 +90,6 @@ $config = array(
 );
 ```
 
-If you save this source as `authsources.php`, you can customize IdP users by volume mount like:
-
-**docker run command**
-
-```sh
-docker run --name=idp \
-  -p 8080:8080 \
-  -e SIMPLESAMLPHP_SP_ENTITY_ID=http://app.example.com \
-  -e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp \
-  -e SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp \
-  -v $PWD/authsources.php:/var/www/simplesamlphp/config/authsources.php \
-  -d kenchan0130/simplesamlphp
-```
-
-**docker-compose**
-
-```yml
-version: "3"
-services:
-  idp:
-    image: kenchan0130/simplesamlphp
-    container_name: idp
-    ports:
-      - "8080:8080"
-    environment:
-      SIMPLESAMLPHP_SP_ENTITY_ID: http://app.example.com
-      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp
-      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp
-    volumes:
-      - authsources.php:/var/www/simplesamlphp/config/authsources.php
-```
-
-For detailed attributes, see [SimpleSAMLphp Identity Provider QuickStart#Authentication module](https://simplesamlphp.org/docs/stable/simplesamlphp-idp#section_2).
-
 ### Customize SP remote metadata reference
 
 If you want to customize SP remote metadata reference, you can define your own users by mounting a configuration file.
@@ -165,36 +107,9 @@ $metadata['entity-id-2'] = array(
 );
 ```
 
-If you save this source as `saml20-sp-remote.php`, you can customize IdP users by volume mount like:
-
-**docker run command**
-
-```sh
-docker run --name=idp \
-  -p 8080:8080 \
-  -v saml20-sp-remote.php:/var/www/simplesamlphp/metadata/saml20-sp-remote.php \
-  -d kenchan0130/simplesamlphp
-```
-
-**docker-compose**
-
-```yml
-version: "3"
-services:
-  idp:
-    image: kenchan0130/simplesamlphp
-    container_name: idp
-    ports:
-      - "8080:8080"
-    volumes:
-      - saml20-sp-remote.php:/var/www/simplesamlphp/metadata/saml20-sp-remote.php
-```
-
-For detailed attributes, see [SP remote metadata reference#SAML 2.0 options](https://simplesamlphp.org/docs/stable/simplesamlphp-reference-sp-remote#section_2).
-
 ## Inspired By
 
-- https://github.com/kristophjunge/docker-test-saml-idp
+- https://github.com/kenchan0130/docker-simplesamlphp
 
 ## License
 

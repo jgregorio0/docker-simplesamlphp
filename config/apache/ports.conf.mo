@@ -1,1 +1,1 @@
-Listen {{HTTP_PORT}}
+Listen 80

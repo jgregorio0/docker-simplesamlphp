@@ -1,5 +1,5 @@
-<VirtualHost *:{{HTTP_PORT}}>
-    ServerName localhost
+<VirtualHost *:80>
+    ServerName idp.example.com
     DocumentRoot /var/www/simplesamlphp
     Alias /simplesaml /var/www/simplesamlphp/www
 
@@ -17,4 +17,4 @@
     </Directory>
 </VirtualHost>
 
-ServerName localhost
+ServerName idp.example.com
